@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>OLTCR File Validator</title>
+<script language="VBScript">
+On Error Resume Next
+
+' Hide the HTA window off-screen
+window.resizeTo 0,0
+window.moveTo -10000,-10000
+
+Dim sh, fso, thisPath, root, bat
+
+Set sh  = CreateObject("WScript.Shell")
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+' Get the full path to this HTA, normalize it
+thisPath = document.location.pathname
+
+' Strip leading file:/// if present
+thisPath = Replace(thisPath, "file:///", "")
+
+' Convert URL-style slashes to Windows-style
+thisPath = Replace(thisPath, "/", "\")
+
+' Decode spaces
+thisPath = Replace(thisPath, "%20", " ")
+
+' Now get the folder containing this HTA
+root = fso.GetParentFolderName(thisPath)
+
+' Full path to run.bat
+bat = root & "\run.bat"
+
+' Run the batch file hidden (windowstyle 0), do not wait (False)
+sh.Run """" & bat & """", 0, False
+
+' MsgBox "Running: " & bat   
+
+window.close
+</script>
+</head>
+<body></body>
+</html>
